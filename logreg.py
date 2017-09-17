@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
-
+from scipy import misc
 
 def sigmoid(a):
     return 1 / (1 + np.exp(-a))
 
 img_size = 784
-epochs = 1000
+epochs = 10
 learning_rate = 0.01
 
 # read in the data
@@ -51,6 +51,7 @@ for i in range(epochs):
     # print loss
     print("Loss: " + str(j))
 
+
 # read in test data and divide by 256 to make values between 0 and 1
 test_data = np.divide(pd.read_csv("train.csv", dtype="float32").as_matrix()[10000:], 256).transpose()
 
@@ -65,3 +66,11 @@ a = sigmoid(z)
 for i in range(len(a)):
     print("Prediction: " + str(a[i]))
     print("Actual: " + str(y[i]))
+
+
+# test data img hand drawn by on of the authors!
+test_image = np.divide(misc.imread("Test Image.jpg", flatten=True), 256).flatten()
+z = test_image.dot(w.transpose()) + b
+a = sigmoid(z)
+print("Prediction: " + str(a))
+print("Actual: " + str(1))
