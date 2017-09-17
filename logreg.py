@@ -6,21 +6,23 @@ def sigmoid(a):
     return 1 / (1 + np.exp(-a))
 
 img_size = 784
-epochs = 100
-learning_rate = 0.001
+epochs = 1000
+learning_rate = 0.01
 
 # read in the data
-raw_data = pd.read_csv("train.csv", dtype="float32").as_matrix()
+train_data = pd.read_csv("train.csv", dtype="float32").as_matrix()[:17000]
 
 # make each column an image
-data = np.divide(raw_data.transpose(), 256)
+data = train_data.transpose()
 
-# take off the first value in each column (the number the image represents)
-x = data[1:].transpose()
+# ignore the first value in each column (the number the image represents) and make each value between 0 and 1
+x = np.divide(data[1:].transpose(), 256)
 
+# take the first value in each column
 y = data[:1].transpose()
 # label the y values as 1 if the number is 1, otherwise 0
 y[y != 1] = 0
+
 
 # init weights and the bias
 w = np.zeros((1, img_size))
@@ -49,3 +51,17 @@ for i in range(epochs):
     # print loss
     print("Loss: " + str(j))
 
+# read in test data and divide by 256 to make values between 0 and 1
+test_data = np.divide(pd.read_csv("train.csv", dtype="float32").as_matrix()[10000:], 256).transpose()
+
+# repeat above steps for test data
+test_x = test_data[1:].transpose()
+
+test_y = test_data[:1].transpose()
+y[y != 1] = 0
+
+z = x.dot(w.transpose()) + b
+a = sigmoid(z)
+for i in range(len(a)):
+    print("Prediction: " + str(a[i]))
+    print("Actual: " + str(y[i]))
