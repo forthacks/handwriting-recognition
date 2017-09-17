@@ -6,7 +6,7 @@ def sigmoid(a):
     return 1 / (1 + np.exp(-a))
 
 img_size = 784
-epochs = 10
+epochs = 1000
 learning_rate = 0.01
 
 # read in the data
